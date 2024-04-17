@@ -26,7 +26,7 @@ RUN set -eux; \
     ; \
     mkdir -p "$HOME/src"; \
     cd "$HOME/src"; \
-    git clone -b master https://github.com/RekGRpth/freenginx.git; \
+    git clone -b default https://github.com/RekGRpth/freenginx.git; \
     mkdir -p "$HOME/src/freenginx/modules"; \
     cd "$HOME/src/freenginx/modules"; \
     git clone -b main https://github.com/RekGRpth/nginx-ejwt-module.git; \

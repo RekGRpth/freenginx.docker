@@ -1,0 +1,69 @@
+name: Docker
+on:
+  push:
+    branches:
+      - latest
+  repository_dispatch:
+    types:
+      - latest
+  workflow_dispatch:
+env:
+  GITHUB_TOKEN: ${{ github.token }}
+  INPUTS_DOCKERFILE: ${{ github.job }}.Dockerfile
+  INPUTS_TAG: ${{ github.job }}
+concurrency:
+  cancel-in-progress: true
+  group: ${{ github.repository }}/${{ github.job }}
+jobs:
+  alpine:
+    env:
+      INPUTS_TAG: latest
+    runs-on: ubuntu-latest
+    steps:
+      - uses: rekgrpth/git-clone-shell-action@v1
+      - uses: rekgrpth/docker-login-build-push-shell-action@v1
+      - uses: rekgrpth/github-publish-action-shell-action@v1
+    timeout-minutes: 30
+  alpine-test:
+    needs: alpine
+    runs-on: ubuntu-latest
+    steps:
+      - uses: rekgrpth/git-clone-shell-action@v1
+      - uses: rekgrpth/docker-login-build-push-shell-action@v1
+    timeout-minutes: 30
+  debian:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: rekgrpth/git-clone-shell-action@v1
+      - uses: rekgrpth/docker-login-build-push-shell-action@v1
+      - uses: rekgrpth/github-publish-action-shell-action@v1
+    timeout-minutes: 30
+  debian-test:
+    needs: debian
+    runs-on: ubuntu-latest
+    steps:
+      - uses: rekgrpth/git-clone-shell-action@v1
+      - uses: rekgrpth/docker-login-build-push-shell-action@v1
+    timeout-minutes: 30
+  gost:
+    needs: alpine
+    runs-on: ubuntu-latest
+    steps:
+      - uses: rekgrpth/git-clone-shell-action@v1
+      - uses: rekgrpth/docker-login-build-push-shell-action@v1
+      - uses: rekgrpth/github-publish-action-shell-action@v1
+    timeout-minutes: 30
+  ubuntu:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: rekgrpth/git-clone-shell-action@v1
+      - uses: rekgrpth/docker-login-build-push-shell-action@v1
+      - uses: rekgrpth/github-publish-action-shell-action@v1
+    timeout-minutes: 30
+  ubuntu-test:
+    needs: ubuntu
+    runs-on: ubuntu-latest
+    steps:
+      - uses: rekgrpth/git-clone-shell-action@v1
+      - uses: rekgrpth/docker-login-build-push-shell-action@v1
+    timeout-minutes: 30

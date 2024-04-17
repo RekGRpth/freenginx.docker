@@ -1,6 +1,6 @@
 #!/bin/sh -eux
 
-docker pull "ghcr.io/rekgrpth/nginx.docker:${INPUTS_BRANCH:-ubuntu}"
+docker pull "ghcr.io/rekgrpth/freenginx.docker:${INPUTS_BRANCH:-ubuntu}"
 docker network create --attachable --opt com.docker.network.bridge.name=docker docker || echo $?
 docker volume create nginx
 NGINX="$(docker volume inspect --format "{{ .Mountpoint }}" nginx)"
@@ -32,4 +32,4 @@ docker run \
             echo "--mount type=bind,source=$DIR,destination=/etc/nginx/$VOLUME,readonly"
         done
     done) \
-    "ghcr.io/rekgrpth/nginx.docker:${INPUTS_BRANCH:-ubuntu}"
+    "ghcr.io/rekgrpth/freenginx.docker:${INPUTS_BRANCH:-ubuntu}"

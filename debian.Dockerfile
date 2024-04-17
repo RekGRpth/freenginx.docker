@@ -124,7 +124,7 @@ RUN set -eux; \
     make -j"$(nproc)" install; \
     cd "$HOME/src/mustach"; \
     make -j"$(nproc)" libs=single install; \
-    cd "$HOME/src/nginx"; \
+    cd "$HOME/src/freenginx"; \
     auto/configure \
         --add-dynamic-module="modules/ngx_devel_kit $(find modules -type f -name "config" | grep -v -e ngx_devel_kit -e "\.git" -e "\/t\/" | while read -r NAME; do echo -n "`dirname "$NAME"` "; done)" \
         --conf-path=/etc/nginx/nginx.conf \

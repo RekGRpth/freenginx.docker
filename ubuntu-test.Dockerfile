@@ -1,4 +1,4 @@
-FROM ghcr.io/rekgrpth/nginx.docker:ubuntu
+FROM ghcr.io/rekgrpth/freenginx.docker:ubuntu
 ADD bin /usr/local/bin
 ADD NimbusSans-Regular.ttf /usr/local/share/fonts/
 CMD [ "nginx" ]

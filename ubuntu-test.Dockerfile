@@ -12,7 +12,6 @@ RUN set -eux; \
     chmod +x /usr/local/bin/*.sh; \
     apt-get update; \
     apt-get full-upgrade -y --no-install-recommends; \
-    export savedAptMark="$(apt-mark showmanual)"; \
     apt-get install -y --no-install-recommends \
         apt-utils \
         autoconf \
@@ -30,7 +29,9 @@ RUN set -eux; \
         flex \
         g++ \
         gcc \
+        gdb \
         git \
+        lcov \
         libbrotli-dev \
         libc-dev \
         libcjson-dev \
@@ -62,12 +63,14 @@ RUN set -eux; \
         libxslt1-dev \
         libyaml-dev \
         make \
+        meson \
         musl-dev \
-        pkg-config \
         perl \
-        postgresql \
         pkg-config \
+        postgresql \
         postgresql-server-dev-all \
+        strace \
+        sudo \
         valgrind \
         zlib1g-dev \
     ; \
@@ -85,11 +88,12 @@ RUN set -eux; \
     git clone -b main https://github.com/RekGRpth/ngx_http_error_page_inherit_module.git; \
     git clone -b main https://github.com/RekGRpth/ngx_http_include_server_module.git; \
     git clone -b main https://github.com/RekGRpth/ngx_http_json_var_module.git; \
+    git clone -b main https://github.com/RekGRpth/ngx_http_upstream_queue_module.git; \
     git clone -b main https://github.com/RekGRpth/ngx_pq_module.git; \
     git clone -b master https://github.com/RekGRpth/echo-nginx-module.git; \
     git clone -b master https://github.com/RekGRpth/encrypted-session-nginx-module.git; \
     git clone -b master https://github.com/RekGRpth/form-input-nginx-module.git; \
-    git clone -b master https://github.com/RekGRpth/headers-more-nginx-module.git; \
+#    git clone -b master https://github.com/RekGRpth/headers-more-nginx-module.git; \
 #    git clone -b master https://github.com/RekGRpth/iconv-nginx-module.git; \
     git clone -b master https://github.com/RekGRpth/nginx_csrf_prevent.git; \
     git clone -b master https://github.com/RekGRpth/nginx-push-stream-module.git; \
@@ -112,6 +116,7 @@ RUN set -eux; \
 #    git clone -b master https://github.com/RekGRpth/ngx_http_substitutions_filter_module.git; \
     git clone -b master https://github.com/RekGRpth/ngx_http_time_var_module.git; \
     git clone -b master https://github.com/RekGRpth/ngx_http_zip_var_module.git; \
+#    git clone -b master https://github.com/RekGRpth/ngx_upstream_jdomain.git; \
     git clone -b master https://github.com/RekGRpth/set-misc-nginx-module.git; \
     cd "$HOME/src/freenginx"; \
     auto/configure \
@@ -175,18 +180,16 @@ RUN set -eux; \
     find "$HOME/src/freenginx/modules" -type d -name "t" | grep -v "\.git" | sort | while read -r NAME; do cd "$(dirname "$NAME")" && prove; done; \
     gosu postgres pg_ctl -m fast -w stop --pgdata=/var/lib/postgresql/data; \
     cd /; \
-    apt-mark auto '.*' > /dev/null; \
-    apt-mark manual $savedAptMark; \
-    find /usr/local -type f -executable -exec ldd '{}' ';' | grep -v 'not found' | awk '/=>/ { print $(NF-1) }' | sort -u | xargs -r dpkg-query --search | cut -d: -f1 | sort -u | xargs -r apt-mark manual; \
-    find /usr/local -type f -executable -exec ldd '{}' ';' | grep -v 'not found' | awk '/=>/ { print $(NF-1) }' | sort -u | xargs -r -i echo "/usr{}" | xargs -r dpkg-query --search | cut -d: -f1 | sort -u | xargs -r apt-mark manual; \
-    apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false; \
     apt-get install -y --no-install-recommends \
         apache2-utils \
     ; \
-    rm -rf /var/lib/apt/lists/* /var/cache/ldconfig/aux-cache /var/cache/ldconfig; \
-    rm -rf "$HOME" /usr/share/doc /usr/share/man /usr/local/share/doc /usr/local/share/man; \
-    find /usr -type f -name "*.la" -delete; \
     mkdir -p "$HOME"; \
     chown -R "$USER":"$GROUP" "$HOME"; \
     install -d -m 0700 -o "$USER" -g "$GROUP" /var/tmp/nginx; \
+    echo "$USER ALL=(ALL:ALL) NOPASSWD: ALL" >>/etc/sudoers; \
+    echo '"\e[A": history-search-backward' >>/etc/inputrc; \
+    echo '"\e[B": history-search-forward' >>/etc/inputrc; \
+    chown -R "$USER":"$GROUP" /usr/local /etc/nginx; \
     echo done
+
+USER "$USER"

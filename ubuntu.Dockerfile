@@ -16,8 +16,10 @@ RUN set -eux; \
     chmod +x /usr/local/bin/*.sh; \
     apt-get update; \
     apt-get full-upgrade -y --no-install-recommends; \
-    groupadd --system --gid 101 "$GROUP"; \
-    useradd --system --uid 101 --home "$HOME" --shell /sbin/nologin --gid "$GROUP" "$USER"; \
+    groupmod -g 1001 ubuntu; \
+    usermod -g 1001 -u 1001 ubuntu; \
+    groupadd --system --gid 1000 "$GROUP"; \
+    useradd --system --uid 1000 --home "$HOME" --shell /bin/bash --gid "$GROUP" "$USER"; \
     apt-get install -y --no-install-recommends \
         apt-utils \
         autoconf \
@@ -198,7 +200,7 @@ RUN set -eux; \
         locales \
         tzdata \
     ; \
-#     -i en_US -c -f UTF-8 -A /usr/share/locale/locale.alias en_US.UTF-8; \
+#    localedef -i en_US -c -f UTF-8 -A /usr/share/locale/locale.alias en_US.UTF-8; \
 #    localedef -i ru_RU -c -f UTF-8 -A /usr/share/locale/locale.alias ru_RU.UTF-8; \
     locale-gen --lang ru_RU.UTF-8; \
     dpkg-reconfigure locales; \

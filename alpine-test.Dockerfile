@@ -70,8 +70,9 @@ RUN set -eux; \
         yaml-dev \
         zlib-dev \
     ; \
-    apk add --no-cache --repository http://dl-cdn.alpinelinux.org/alpine/edge/testing --virtual .edge \
-        perl-test-file \
+    cpan -Ti \
+        Test::File \
+        Test::Nginx::Socket \
     ; \
     mkdir -p "$HOME/src"; \
     cd "$HOME/src"; \
@@ -82,11 +83,12 @@ RUN set -eux; \
     git clone -b main https://github.com/RekGRpth/ngx_http_error_page_inherit_module.git; \
     git clone -b main https://github.com/RekGRpth/ngx_http_include_server_module.git; \
     git clone -b main https://github.com/RekGRpth/ngx_http_json_var_module.git; \
+    git clone -b main https://github.com/RekGRpth/ngx_http_upstream_queue_module.git; \
     git clone -b main https://github.com/RekGRpth/ngx_pq_module.git; \
     git clone -b master https://github.com/RekGRpth/echo-nginx-module.git; \
     git clone -b master https://github.com/RekGRpth/encrypted-session-nginx-module.git; \
     git clone -b master https://github.com/RekGRpth/form-input-nginx-module.git; \
-    git clone -b master https://github.com/RekGRpth/headers-more-nginx-module.git; \
+#    git clone -b master https://github.com/RekGRpth/headers-more-nginx-module.git; \
 #    git clone -b master https://github.com/RekGRpth/iconv-nginx-module.git; \
     git clone -b master https://github.com/RekGRpth/nginx_csrf_prevent.git; \
     git clone -b master https://github.com/RekGRpth/nginx-push-stream-module.git; \
@@ -109,6 +111,7 @@ RUN set -eux; \
 #    git clone -b master https://github.com/RekGRpth/ngx_http_substitutions_filter_module.git; \
     git clone -b master https://github.com/RekGRpth/ngx_http_time_var_module.git; \
     git clone -b master https://github.com/RekGRpth/ngx_http_zip_var_module.git; \
+#    git clone -b master https://github.com/RekGRpth/ngx_upstream_jdomain.git; \
     git clone -b master https://github.com/RekGRpth/set-misc-nginx-module.git; \
     cd "$HOME/src/freenginx"; \
     auto/configure \
@@ -177,7 +180,6 @@ RUN set -eux; \
     find /usr/local/bin -type f -exec strip '{}' \;; \
     find /usr/local/lib -type f -name "*.so" -exec strip '{}' \;; \
     apk del --no-cache .build; \
-    apk del --no-cache .edge; \
     rm -rf "$HOME" /usr/share/doc /usr/share/man /usr/local/share/doc /usr/local/share/man; \
     find /usr -type f -name "*.la" -delete; \
     mkdir -p "$HOME"; \

@@ -95,7 +95,7 @@ RUN set -eux; \
     git clone -b master https://github.com/RekGRpth/nginx-upstream-fair.git; \
     git clone -b master https://github.com/RekGRpth/nginx-uuid4-module.git; \
     git clone -b master https://github.com/RekGRpth/ngx_brotli.git; \
-    git clone -b master https://github.com/RekGRpth/ngx_devel_kit.git; \
+#    git clone -b master https://github.com/RekGRpth/ngx_devel_kit.git; \
     git clone -b master https://github.com/RekGRpth/ngx_http_auth_basic_ldap_module.git; \
     git clone -b master https://github.com/RekGRpth/ngx_http_auth_pam_module.git; \
     git clone -b master https://github.com/RekGRpth/ngx_http_captcha_module.git; \
@@ -126,7 +126,7 @@ RUN set -eux; \
     make -j"$(nproc)" libs=single install; \
     cd "$HOME/src/freenginx"; \
     auto/configure \
-        --add-dynamic-module="modules/ngx_devel_kit $(find modules -type f -name "config" | grep -v -e ngx_devel_kit -e "\.git" -e "\/t\/" | while read -r NAME; do echo -n "`dirname "$NAME"` "; done)" \
+        --add-dynamic-module="$(find modules -type f -name "config" | grep -v -e ngx_devel_kit -e "\.git" -e "\/t\/" | while read -r NAME; do echo -n "`dirname "$NAME"` "; done)" \
         --conf-path=/etc/nginx/nginx.conf \
         --error-log-path=/var/log/nginx/error.log \
         --group="$GROUP" \

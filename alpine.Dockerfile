@@ -85,15 +85,15 @@ RUN set -eux; \
     git clone -b main https://github.com/RekGRpth/ngx_http_upstream_queue_module.git; \
     git clone -b main https://github.com/RekGRpth/ngx_pq_module.git; \
     git clone -b master https://github.com/RekGRpth/echo-nginx-module.git; \
-    git clone -b master https://github.com/RekGRpth/encrypted-session-nginx-module.git; \
-    git clone -b master https://github.com/RekGRpth/form-input-nginx-module.git; \
+#    git clone -b master https://github.com/RekGRpth/encrypted-session-nginx-module.git; \
+#    git clone -b master https://github.com/RekGRpth/form-input-nginx-module.git; \
     git clone -b master https://github.com/RekGRpth/headers-more-nginx-module.git; \
-    git clone -b master https://github.com/RekGRpth/iconv-nginx-module.git; \
+#    git clone -b master https://github.com/RekGRpth/iconv-nginx-module.git; \
     git clone -b master https://github.com/RekGRpth/nginx_csrf_prevent.git; \
     git clone -b master https://github.com/RekGRpth/nginx-push-stream-module.git; \
     git clone -b master https://github.com/RekGRpth/nginx-upload-module.git; \
     git clone -b master https://github.com/RekGRpth/nginx-upstream-fair.git; \
-    git clone -b master https://github.com/RekGRpth/nginx-uuid4-module.git; \
+#    git clone -b master https://github.com/RekGRpth/nginx-uuid4-module.git; \
     git clone -b master https://github.com/RekGRpth/ngx_brotli.git; \
 #    git clone -b master https://github.com/RekGRpth/ngx_devel_kit.git; \
     git clone -b master https://github.com/RekGRpth/ngx_http_auth_basic_ldap_module.git; \
@@ -106,12 +106,12 @@ RUN set -eux; \
     git clone -b master https://github.com/RekGRpth/ngx_http_mustach_module.git; \
     git clone -b master https://github.com/RekGRpth/ngx_http_remote_passwd.git; \
     git clone -b master https://github.com/RekGRpth/ngx_http_response_body_module.git; \
-    git clone -b master https://github.com/RekGRpth/ngx_http_sign_module.git; \
+#    git clone -b master https://github.com/RekGRpth/ngx_http_sign_module.git; \
     git clone -b master https://github.com/RekGRpth/ngx_http_substitutions_filter_module.git; \
     git clone -b master https://github.com/RekGRpth/ngx_http_time_var_module.git; \
     git clone -b master https://github.com/RekGRpth/ngx_http_zip_var_module.git; \
     git clone -b master https://github.com/RekGRpth/ngx_upstream_jdomain.git; \
-    git clone -b master https://github.com/RekGRpth/set-misc-nginx-module.git; \
+#    git clone -b master https://github.com/RekGRpth/set-misc-nginx-module.git; \
     ln -fs libldap.a /usr/lib/libldap_r.a; \
     ln -fs libldap.so /usr/lib/libldap_r.so; \
     cd "$HOME/src/htmldoc"; \

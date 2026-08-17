@@ -76,6 +76,7 @@ RUN set -eux; \
     ; \
     rm -rf /usr/local/man; \
     cpan -Ti \
+        HTTP::Daemon \
         Test::File \
         Test::Nginx::Socket \
     ; \
@@ -116,7 +117,6 @@ RUN set -eux; \
 #    git clone -b master https://github.com/RekGRpth/ngx_http_substitutions_filter_module.git; \
     git clone -b master https://github.com/RekGRpth/ngx_http_time_var_module.git; \
     git clone -b master https://github.com/RekGRpth/ngx_http_zip_var_module.git; \
-#    git clone -b master https://github.com/RekGRpth/ngx_upstream_jdomain.git; \
 #    git clone -b master https://github.com/RekGRpth/set-misc-nginx-module.git; \
     cd "$HOME/src/freenginx"; \
     auto/configure \

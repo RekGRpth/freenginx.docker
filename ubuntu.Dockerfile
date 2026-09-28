@@ -42,11 +42,14 @@ RUN set -eux; \
         libcups2-dev \
         libexpat1-dev \
         libfltk1.3-dev \
+        libfreetype-dev \
         libgcrypt20-dev \
         libgd-dev \
         libgeoip-dev \
+        libharfbuzz-dev \
         libiconv-hook-dev \
         libjansson-dev \
+        libjbig2dec0-dev \
         libjpeg-dev \
         libjson-c-dev \
         libkrb5-dev \
@@ -75,6 +78,7 @@ RUN set -eux; \
     mkdir -p "$HOME/src"; \
     cd "$HOME/src"; \
     git clone -b master https://github.com/RekGRpth/htmldoc.git; \
+    git clone -b master https://github.com/RekGRpth/mupdf.git; \
     git clone -b master https://github.com/RekGRpth/mustach.git; \
     git clone -b default https://github.com/RekGRpth/freenginx.git; \
     mkdir -p "$HOME/src/freenginx/modules"; \
@@ -104,6 +108,7 @@ RUN set -eux; \
     git clone -b master https://github.com/RekGRpth/ngx_http_headers_module.git; \
     git clone -b master https://github.com/RekGRpth/ngx_http_htmldoc_module.git; \
     git clone -b master https://github.com/RekGRpth/ngx_http_json_module.git; \
+    git clone -b master https://github.com/RekGRpth/ngx_http_mupdf_module.git; \
     git clone -b master https://github.com/RekGRpth/ngx_http_mustach_module.git; \
     git clone -b master https://github.com/RekGRpth/ngx_http_remote_passwd.git; \
     git clone -b master https://github.com/RekGRpth/ngx_http_response_body_module.git; \
@@ -124,6 +129,10 @@ RUN set -eux; \
     make -j"$(nproc)" install; \
     cd "$HOME/src/mustach"; \
     make -j"$(nproc)" libs=single install; \
+    cd "$HOME/src/mupdf"; \
+    git -c url.https://github.com/ArtifexSoftware/.insteadOf=https://github.com/RekGRpth/ submodule update --init --depth 1 thirdparty/extract thirdparty/gumbo-parser thirdparty/lcms2; \
+    touch thirdparty/extract/src/*_template.c thirdparty/extract/src/*_template.h; \
+    make -j"$(nproc)" build=release shared=yes mujs=no USE_CMARK_GFM=no USE_SYSTEM_GUMBO=no USE_SYSTEM_LIBS=yes XCFLAGS=-DFZ_ENABLE_MD=0 install-libs; \
     cd "$HOME/src/freenginx"; \
     auto/configure \
         --add-dynamic-module="$(find modules -type f -name "config" | grep -v -e ngx_devel_kit -e "\.git" -e "\/t\/" | while read -r NAME; do echo -n "`dirname "$NAME"` "; done)" \
@@ -186,6 +195,7 @@ RUN set -eux; \
     ln -fs /usr/local/lib/nginx /etc/nginx/modules; \
     mkdir -p /run/nginx; \
     cd /; \
+    ldconfig; \
     apt-mark auto '.*' > /dev/null; \
     find /usr/local -type f -executable -exec ldd '{}' ';' | grep -v 'not found' | awk '/=>/ { print $(NF-1) }' | sort -u | xargs -r dpkg-query --search | cut -d: -f1 | sort -u | xargs -r apt-mark manual; \
     find /usr/local -type f -executable -exec ldd '{}' ';' | grep -v 'not found' | awk '/=>/ { print $(NF-1) }' | sort -u | xargs -r -i echo "/usr{}" | xargs -r dpkg-query --search | cut -d: -f1 | sort -u | xargs -r apt-mark manual; \
